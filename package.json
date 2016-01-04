@@ -1,0 +1,25 @@
+{
+    "name": "angular2-quickstart",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {},
+    "dependencies": {
+        "angular2": "2.0.0-beta.0",
+        "es6-shim": "^0.33.3",
+        "es6-promise": "^3.0.2",
+        "es7-reflect-metadata": "^1.4.0",
+        "rxjs": "5.0.0-beta.0",
+        "zone.js": "0.5.10"
+    },
+    "devDependencies": {
+        "css-loader": "^0.23.1",
+        "ts-loader": "^0.7.2",
+        "html-loader": "^0.4.0",
+        "json-loader": "^0.5.4",
+        "style-loader": "^0.13.0",
+        "typescript": "^1.7.5",
+        "reflect-metadata": "0.1.2",
+        "webpack": "^1.12.9",
+        "webpack-dev-server": "^1.14.0"
+    }
+}
