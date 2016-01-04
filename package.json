@@ -2,7 +2,11 @@
     "name": "angular2-quickstart",
     "version": "1.0.0",
     "private": true,
-    "scripts": {},
+    "scripts": {
+        "clean": "rm -r build/*",
+        "watch": "webpack --watch --progress --profile --colors --display-error-details --display-cached",
+        "build": "npm run clean && webpack --progress --profile --colors --display-error-details --display-cached"
+    },
     "dependencies": {
         "angular2": "2.0.0-beta.0",
         "es6-shim": "^0.33.3",

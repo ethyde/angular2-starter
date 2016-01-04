@@ -4,4 +4,8 @@ import {Component, View} from 'angular2/core';
     selector: 'name-app',
     template: require('./index.html')
 })
-export class AppComponent { }
+export class APP {
+    constructor() {
+
+    }
+}

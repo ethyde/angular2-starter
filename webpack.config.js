@@ -10,6 +10,10 @@ module.exports = {
         path: path.join(__dirname, 'build'),
         filename: '[name].js'
     },
+    resolve: {
+        // ensure loader extensions match
+        extensions: ['','.ts','.js','.json','.css','.html']
+    },
     module: {
         loaders: [
             {
