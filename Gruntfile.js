@@ -76,6 +76,24 @@ module.exports = function( grunt ) {
                 dest: "<%= meta.prod.js %>/vendor/"
             }
         },
+        // TypeScript tasks
+        tslint: {
+            options: {
+                configuration: 'etc/tslint.json'
+            },
+            files: {
+                src: ['app/components/**/*.ts']
+            }
+        },
+        ts: {
+            all: {
+                tsconfig: true,
+                files: [{
+                    src: ['app/components/**/*.ts'],
+                    dest: 'build'
+                }]
+            }
+        },
         // Concat Task
         concat: {
             options: {
@@ -87,6 +105,31 @@ module.exports = function( grunt ) {
                     "<%= meta.dev.js %>/main.js"
                 ],
                 dest: "<%= meta.prod.js %>/main.js"
+            },
+            vendor: {
+                files: {
+                    '<%= meta.prod.js %>/vendor/bundle.js': [
+                    'node_modules/angular2/bundles/angular2-polyfills.js',
+                    'node_modules/systemjs/dist/system.src.js',
+                    'node_modules/rxjs/bundles/Rx.js',
+                    'node_modules/angular2/bundles/angular2.dev.js',
+                    'node_modules/angular2/bundles/router.dev.js',
+                    'node_modules/angular2/bundles/http.dev.js'
+                    ]
+                }
+            }
+        },
+        // Minify your JS files
+        uglify: {
+            options: {
+                banner: "<%= meta.banner %>"
+            },
+            prod: {
+                src: "<%= concat.dev.src %>",
+                dest: "<%= meta.prod.js %>/main.js"
+            },
+            vendor: {
+                files: "<%= concat.vendor.files %>"
             }
         },
         // Grunt PostCSS task
@@ -186,6 +229,7 @@ module.exports = function( grunt ) {
             compress: [ "uglify", "csswring" ],
             lint: [ "postcss:lint", "eslint" ]
         },
+        // Simple localhost server
         connect: {
             server: {
                 options: {
@@ -201,24 +245,6 @@ module.exports = function( grunt ) {
                   }
               }
         },
-        // TypeScript tasks
-        tslint: {
-            options: {
-                configuration: 'tslint.json'
-            },
-            files: {
-                src: ['app/components/**/*.ts']
-            }
-        },
-        ts: {
-            all: {
-                tsconfig: true,
-                files: [{
-                    src: ['app/components/**/*.ts'],
-                    dest: 'build'
-                }]
-            }
-        }
         // Watch and livereload
         watch: {
             options: {
