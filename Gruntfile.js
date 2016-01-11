@@ -32,60 +32,61 @@ module.exports = function( grunt ) {
         pkg: grunt.file.readJSON( "package.json" ),
         bower: grunt.file.readJSON( ".bowerrc" ),
         meta: {
-            day: "<%%= grunt.template.today('dd-mm-yyyy') %>",
-            hour: "<%%= grunt.template.today('HH:MM') %>",
-            banner: "/*! <%%= pkg.name %> - v<%%= pkg.version %> - <%%= meta.day %> <%%= meta.hour %> */\n",
+            day: "<%= grunt.template.today('dd-mm-yyyy') %>",
+            hour: "<%= grunt.template.today('HH:MM') %>",
+            banner: "/*! <%= pkg.name %> - v<%= pkg.version %> - <%= meta.day %> <%= meta.hour %> */\n",
             dev: {
-                assets: "<%= whereDevAssets %>",
-                css: "<%%= meta.dev.assets %>/css",
-                js: "<%%= meta.dev.assets %>/js",
-                img: "<%%= meta.dev.assets %>/images",
-                fonts: "<%%= meta.dev.assets %>/fonts"
+                assets: "app/assets",
+                css: "<%= meta.dev.assets %>/css",
+                js: "<%= meta.dev.assets %>/js",
+                img: "<%= meta.dev.assets %>/images",
+                fonts: "<%= meta.dev.assets %>/fonts"
             },
             prod: {
-                assets: "<%= whereBuildAssets %>",
-                css: "<%%= meta.prod.assets %>/css",
-                js: "<%%= meta.prod.assets %>/js",
-                img: "<%%= meta.prod.assets %>/images",
-                fonts: "<%%= meta.prod.assets %>/fonts"
+                assets: "build",
+                css: "<%= meta.prod.assets %>/css",
+                js: "<%= meta.prod.assets %>/js",
+                img: "<%= meta.prod.assets %>/images",
+                fonts: "<%= meta.prod.assets %>/fonts"
             }
         },
         // clean files assets in folders
         clean: {
-            assets: [ "<%%= meta.prod.assets %>" ]
+            assets: [ "<%= meta.prod.assets %>" ]
         },
         eslint: {
             options: {
                 configFile: "etc/.eslintrc"
             },
-            target: ["<%%= meta.dev.js %>/main.js"]
+            target: ["<%= meta.dev.js %>/main.js"]
         },
         // Copy files and folders.
         copy: {
             font: {
                 expand: true, // Enable dynamic expansion
-                cwd: "<%%= meta.dev.fonts %>/", // Src matches are relative to this path
+                cwd: "<%= meta.dev.fonts %>/", // Src matches are relative to this path
                 src: [ "*.{eot,svg,ttf,otf,woff,woff2}" ], // Actual patterns to match
-                dest: "<%%= meta.prod.fonts %>/" // Destination path prefix
+                dest: "<%= meta.prod.fonts %>/" // Destination path prefix
             },
             jsvendor: {
                 expand: true,
                 flatten: true,
-                cwd: "<%%= bower.directory %>/",
+                cwd: "<%= bower.directory %>/",
                 src: [ "jquery/dist/jquery.min.js" ],
-                dest: "<%%= meta.prod.js %>/vendor/"
+                dest: "<%= meta.prod.js %>/vendor/"
             }
         },
+        // Concat Task
         concat: {
             options: {
-                banner: "<%%= meta.banner %>",
+                banner: "<%= meta.banner %>",
                 sourceMap: true
             },
             dev: {
-                src: [ "<%%= meta.dev.js %>/plugin/*.js",
-                    "<%%= meta.dev.js %>/main.js"
+                src: [ "<%= meta.dev.js %>/plugin/*.js",
+                    "<%= meta.dev.js %>/main.js"
                 ],
-                dest: "<%%= meta.prod.js %>/main.js"
+                dest: "<%= meta.prod.js %>/main.js"
             }
         },
         // Grunt PostCSS task
@@ -123,18 +124,18 @@ module.exports = function( grunt ) {
                         })
                     ]
                 },
-                src: [ "<%%= meta.dev.css %>/**/*.css" ]
+                src: [ "<%= meta.dev.css %>/**/*.css" ]
             },
             dev: {
-                src: "<%%= meta.dev.css %>/main.css",
-                dest: "<%%= meta.prod.css %>/main.css"
+                src: "<%= meta.dev.css %>/main.css",
+                dest: "<%= meta.prod.css %>/main.css"
             },
             prod: {
                 options: {
                     map: false
                 },
-                src: "<%%= meta.dev.css %>/main.css",
-                dest: "<%%= meta.prod.css %>/main.css"
+                src: "<%= meta.dev.css %>/main.css",
+                dest: "<%= meta.prod.css %>/main.css"
             }
         },
         // Minify CSS
@@ -144,8 +145,8 @@ module.exports = function( grunt ) {
                 removeAllComments: true
             },
             prod: {
-                src: "<%%= postcss.dev.dest %>",
-                dest: "<%%= meta.prod.css %>/main.css"
+                src: "<%= postcss.dev.dest %>",
+                dest: "<%= meta.prod.css %>/main.css"
             }
         },
         // Minify PNG, JPEG and GIF images
@@ -153,12 +154,13 @@ module.exports = function( grunt ) {
             opti: {
                 files: [ {
                     expand: true,
-                    cwd: "<%%= meta.dev.img %>/",
+                    cwd: "<%= meta.dev.img %>/",
                     src: [ "**/*.{png,jpg,gif,svg}" ],
-                    dest: "<%%= meta.prod.img %>/"
+                    dest: "<%= meta.prod.img %>/"
                 } ]
             }
         },
+        // Critical task generate critical/above-the-fold minimal css
         critical: {
             prod: {
                 options: {
@@ -166,40 +168,74 @@ module.exports = function( grunt ) {
                     height: 768
                 },
                 src: '<%= whatUrl %>',
-                dest: '<%%= meta.prod.css %>/critical.css'
+                dest: '<%= meta.prod.css %>/critical.css'
             }
         },
+        // Load task in concurente
+        concurrent: {
+            base: [ "postcss:dev",
+                    "concat",
+                    "imagemin",
+                    "copy"
+                    ],
+            prod: [ "postcss:prod",
+                    "concat",
+                    "imagemin",
+                    "copy"
+                    ],
+            compress: [ "uglify", "csswring" ],
+            lint: [ "postcss:lint", "eslint" ]
+        },
+        connect: {
+            server: {
+                options: {
+                    port: 3000,
+                    base: {
+                        path: './',
+                        options: {
+                          index: 'dist/index.html'
+                      }
+                      },
+                      open: true,
+                      livereload: 6325
+                  }
+              }
+        },
+        // TypeScript tasks
+        tslint: {
+            options: {
+                configuration: 'tslint.json'
+            },
+            files: {
+                src: ['app/components/**/*.ts']
+            }
+        },
+        ts: {
+            all: {
+                tsconfig: true,
+                files: [{
+                    src: ['app/components/**/*.ts'],
+                    dest: 'build'
+                }]
+            }
+        }
         // Watch and livereload
         watch: {
             options: {
                 livereload: 6325
             },
             js: {
-                files: [ "<%%= meta.dev.js %>/main.js", "<%%= meta.dev.js %>/plugin/*.js" ],
+                files: [ "<%= meta.dev.js %>/main.js", "<%= meta.dev.js %>/plugin/*.js" ],
                 tasks: [ "newer:concat" ]
             },
             images: {
-                files: "<%%= meta.dev.img %>/**/*.{png,jpg,gif,svg}",
+                files: "<%= meta.dev.img %>/**/*.{png,jpg,gif,svg}",
                 tasks: [ "newer:imagemin" ]
             },
             css: {
-                files: "<%%= meta.dev.css %>/**/*.css",
+                files: "<%= meta.dev.css %>/**/*.css",
                 tasks: [ "newer:postcss:dev" ]
             }
-        },
-        concurrent: {
-            base: [ "postcss:dev",
-                    <% if (babelOrNot) { %>"babel:dev"<% } else { %>"concat"<% } %>,
-                    "imagemin",
-                    "copy"
-                    ],
-            prod: [ "postcss:prod",
-                    <% if (babelOrNot) { %>"babel:prod"<% } else { %>"concat"<% } %>,
-                    "imagemin",
-                    "copy"
-                    ],
-            compress: [ "uglify", "csswring" ],
-            lint: [ "postcss:lint", "eslint" ]
         }
     } );
 
