@@ -2,6 +2,8 @@
  * Providers provided by Angular
  */
 import {bootstrap}  from 'angular2/platform/browser';
+import { ROUTER_PROVIDERS } from 'angular2/router';
+import { HTTP_PROVIDERS } from 'angular2/http';
 
 /*
  * App Component
@@ -9,4 +11,7 @@ import {bootstrap}  from 'angular2/platform/browser';
  */
 import {APP} from './app/app';
 
-bootstrap(APP);
+bootstrap(APP, [
+    ROUTER_PROVIDERS,
+    HTTP_PROVIDERS
+]);

@@ -2,28 +2,62 @@
     "name": "angular2-quickstart",
     "version": "1.0.0",
     "private": true,
-    "scripts": {
-        "clean": "rm -r build/*",
-        "watch": "webpack --watch --progress --profile --colors --display-error-details --display-cached",
-        "build": "npm run clean && webpack --progress --profile --colors --display-error-details --display-cached"
+    "author": "",
+    "description": "A bootstrap architecture for an Angular2 application",
+    "license": "WTFPL",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/ethyde/generator-bijoo.git"
     },
+    "bugs": {
+        "url": "https://github.com/ethyde/generator-bijoo/issues"
+    },
+    "scripts": {},
     "dependencies": {
         "angular2": "2.0.0-beta.0",
+        "systemjs": "0.19.6",
         "es6-shim": "^0.33.3",
         "es6-promise": "^3.0.2",
-        "es7-reflect-metadata": "^1.4.0",
-        "rxjs": "5.0.0-beta.0",
+        "reflect-metadata": "^0.1.2",
+        "rxjs": "^5.0.0-beta.0",
         "zone.js": "0.5.10"
     },
     "devDependencies": {
-        "css-loader": "^0.23.1",
-        "ts-loader": "^0.7.2",
-        "html-loader": "^0.4.0",
-        "json-loader": "^0.5.4",
-        "style-loader": "^0.13.0",
-        "typescript": "^1.7.5",
-        "reflect-metadata": "0.1.2",
-        "webpack": "^1.12.9",
-        "webpack-dev-server": "^1.14.0"
+        "grunt": "^0.4.5", // GRUNT
+        "jit-grunt": "^0.9.1", // UTILS TASKS
+        "grunt-concurrent":"^2.1.0",
+        "time-grunt": "^1.3.0",
+        "grunt-critical": "^0.2.0",
+        "grunt-eslint": "^17.3.1",
+        "stylelint": "^3.1.4",
+        "grunt-contrib-connect": "^0.11.2",
+        "grunt-contrib-clean": "^0.7.0", // COMMONS TASKS
+        "grunt-contrib-copy": "^0.8.2",
+        "grunt-contrib-imagemin": "^1.0.0",
+        "grunt-contrib-watch": "^0.6.1",
+        "grunt-contrib-concat": "^0.5.1",
+        "grunt-contrib-connect": "^0.11.2",
+        "grunt-postcss": "^0.7.1", // ¨POSTCSS & POSTCSS' Plugins
+        "postcss": "^5.0.13", 
+        "autoprefixer": "^6.2.1",
+        "postcss-calc": "^5.0.0",
+        "postcss-color-function": "^2.0.0",
+        "postcss-color-hex-alpha": "^2.0.0",
+        "postcss-custom-media": "^5.0.0",
+        "postcss-custom-properties": "^5.0.0",
+        "postcss-custom-selectors": "^3.0.0",
+        "postcss-import": "^7.1.3",
+        "postcss-media-minmax": "^2.1.1",
+        "postcss-selector-matches": "^2.0.1",
+        "postcss-selector-not": "^2.0.0",
+        "postcss-nested": "^1.0.0",
+        "postcss-quantity-queries": "^0.4.0",
+        "postcss-neat": "^2.4.2",
+        "css-mqpacker":"^4.0.0",
+        "csswring": "^4.1.1",
+        "grunt-ts": "^5.3.0-beta.3", // TYPESCRIPT
+        "grunt-tslint": "^3.0.1",
+        "tslint": "^3.2.1",
+        "typescript": "^1.7.5"
     }
 }

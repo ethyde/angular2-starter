@@ -1,9 +1,26 @@
-<html>
+<!doctype html>
+<html lang="fr">
   <head>
-    <title>Project - Angular 2 - Webpack</title>
+    <title>Project - Angular 2</title>
   </head>
-  <!-- 3. Display the application -->
+
   <body>
+
     <name-app>Loading...</name-app>
+
+    <script src="dist/vendor/bundle.js"></script>
+    <script>
+      System.config({
+        packages: {
+          './': { defaultExtension: 'js' }
+        },
+        map: {
+          'angular2': 'node_modules/angular2',
+          'rxjs': 'node_modules/rxjs'
+        }
+      });
+      System.import('dist/bootstrap')
+        .then(null, console.error.bind(console));
+    </script>
   </body>
 </html>
