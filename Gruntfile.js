@@ -30,7 +30,6 @@ module.exports = function( grunt ) {
     // Project configuration.
     grunt.initConfig( {
         pkg: grunt.file.readJSON( "package.json" ),
-        bower: grunt.file.readJSON( ".bowerrc" ),
         meta: {
             day: "<%= grunt.template.today('dd-mm-yyyy') %>",
             hour: "<%= grunt.template.today('HH:MM') %>",
@@ -67,13 +66,6 @@ module.exports = function( grunt ) {
                 cwd: "<%= meta.dev.fonts %>/", // Src matches are relative to this path
                 src: [ "*.{eot,svg,ttf,otf,woff,woff2}" ], // Actual patterns to match
                 dest: "<%= meta.prod.fonts %>/" // Destination path prefix
-            },
-            jsvendor: {
-                expand: true,
-                flatten: true,
-                cwd: "<%= bower.directory %>/",
-                src: [ "jquery/dist/jquery.min.js" ],
-                dest: "<%= meta.prod.js %>/vendor/"
             }
         },
         // TypeScript tasks
@@ -234,14 +226,14 @@ module.exports = function( grunt ) {
             server: {
                 options: {
                     port: 3000,
+                    open: true,
                     base: {
                         path: './',
                         options: {
-                          index: 'dist/index.html'
-                      }
-                      },
-                      open: true,
-                      livereload: 6325
+                            index: 'build/index.html'
+                        }
+                    },
+                    livereload: 6325
                   }
               }
         },

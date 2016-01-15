@@ -1,4 +1,4 @@
-import { Component, View } from 'angular2/angular2';
+import { Component, View } from'angular2/core';;
 
 @Component({
     selector: 'hello',
@@ -6,7 +6,7 @@ import { Component, View } from 'angular2/angular2';
 })
 
 @View({
-    templateUrl: 'app/components/hello/hello.html'
+    templateUrl: 'app/components/component_name/directives/hello.html'
 })
 
 export class Hello {

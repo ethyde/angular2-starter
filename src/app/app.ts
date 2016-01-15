@@ -4,7 +4,7 @@ import {Component, View} from 'angular2/core';
     selector: 'name-app'
 })
 
-@view({
+@View({
     templateUrl: './index.html'
 })
 
