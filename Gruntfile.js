@@ -42,7 +42,8 @@ module.exports = function( grunt ) {
                 fonts: "<%= meta.dev.assets %>/fonts"
             },
             prod: {
-                assets: "build",
+                build: "build",
+                assets: "<%= meta.prod.build %>/assets",
                 css: "<%= meta.prod.assets %>/css",
                 js: "<%= meta.prod.assets %>/js",
                 img: "<%= meta.prod.assets %>/images",
@@ -51,7 +52,11 @@ module.exports = function( grunt ) {
         },
         // clean files assets in folders
         clean: {
-            assets: [ "<%= meta.prod.assets %>" ]
+            assets: [ "<%= meta.prod.assets %>" ],
+            baseDirFile: {
+                expand: true,
+                src: ['**/.baseDir.ts']
+            }
         },
         eslint: {
             options: {
@@ -66,6 +71,23 @@ module.exports = function( grunt ) {
                 cwd: "<%= meta.dev.fonts %>/", // Src matches are relative to this path
                 src: [ "*.{eot,svg,ttf,otf,woff,woff2}" ], // Actual patterns to match
                 dest: "<%= meta.prod.fonts %>/" // Destination path prefix
+            },
+            html: {
+                expand: true,
+                cwd: 'src', 
+                src: ['**/*.html'], 
+                dest: '<%= meta.prod.build %>'
+            },
+            prod: {
+                src: [
+                    'node_modules/angular2/bundles/angular2-polyfills.js',
+                    'node_modules/systemjs/dist/system.src.js',
+                    'node_modules/rxjs/bundles/Rx.js',
+                    'node_modules/angular2/bundles/angular2.dev.js',
+                    'node_modules/angular2/bundles/router.dev.js',
+                    'node_modules/angular2/bundles/http.dev.js'
+                ],
+                dest: '<%= meta.prod.build %>/vendor/'
             }
         },
         // TypeScript tasks
@@ -82,7 +104,7 @@ module.exports = function( grunt ) {
                 tsconfig: true,
                 files: [{
                     src: ['app/components/**/*.ts'],
-                    dest: 'build'
+                    dest: '<%= meta.prod.build %>'
                 }]
             }
         },
@@ -97,18 +119,6 @@ module.exports = function( grunt ) {
                     "<%= meta.dev.js %>/main.js"
                 ],
                 dest: "<%= meta.prod.js %>/main.js"
-            },
-            vendor: {
-                files: {
-                    '<%= meta.prod.js %>/vendor/bundle.js': [
-                    'node_modules/angular2/bundles/angular2-polyfills.js',
-                    'node_modules/systemjs/dist/system.src.js',
-                    'node_modules/rxjs/bundles/Rx.js',
-                    'node_modules/angular2/bundles/angular2.dev.js',
-                    'node_modules/angular2/bundles/router.dev.js',
-                    'node_modules/angular2/bundles/http.dev.js'
-                    ]
-                }
             }
         },
         // Minify your JS files
@@ -225,14 +235,9 @@ module.exports = function( grunt ) {
         connect: {
             server: {
                 options: {
-                    port: 3000,
+                    port: 6000,
                     open: true,
-                    base: {
-                        path: './',
-                        options: {
-                            index: 'build/index.html'
-                        }
-                    },
+                    base: '<%= meta.prod.build %>/app/index.html',
                     livereload: 6325
                   }
               }
@@ -266,5 +271,7 @@ module.exports = function( grunt ) {
 
     // This is the linting task
     grunt.registerTask( "lint", [ "concurrent:lint" ] );
+
+    grunt.registerTask( "test", [ "copy:prod", "ts", "copy:html",'clean:baseDirFile', 'connect:server' ] );
 
 };
